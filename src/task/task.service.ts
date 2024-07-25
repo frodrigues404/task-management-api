@@ -15,6 +15,7 @@ export class TaskService {
         const foundTask = this.tasks.filter(t => t.id === id);
 
         if(foundTask.length) {
+            console.log(foundTask[0]);
             return foundTask[0];
         }
         
