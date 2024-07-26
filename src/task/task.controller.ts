@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { TaskDto } from './task.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { FindAllParams, TaskDto } from './task.dto';
 import { TaskService } from './task.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('task')
 export class TaskController {
     constructor(private readonly taskService: TaskService){}
@@ -16,8 +18,18 @@ export class TaskController {
         this.taskService.findById(id);    
     }
 
+    @Get()
+    findAll(@Query() params: FindAllParams): TaskDto[]{
+        return this.taskService.findAll(params);
+    }
+
     @Put()
     update(@Body() task: TaskDto){
         this.taskService.update(task);
+    }
+
+    @Delete('/:id')
+    remove(@Param('id') id: string){
+        this.taskService.delete(id);
     }
 }
